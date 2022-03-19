@@ -79,8 +79,8 @@ const chatAlreadyExists=(recipientEmail)=>
                 
             }
         }).map((chat)=>(
-            <Contact>
-               <Chat key={chat.id} id={chat.id} users={chat.data().users}></Chat>
+            <Contact key={chat.id}>
+               <Chat  id={chat.id} users={chat.data().users}></Chat>
             </Contact>
             
         ))}
