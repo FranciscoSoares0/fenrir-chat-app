@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from "styled-components";
 import Head from "next/head";
-import {Avatar,Button, IconButton} from "@material-ui/core";
+import {Avatar,IconButton} from "@material-ui/core";
 import { auth,provider } from '../firebase';
 import GoogleIcon from '@mui/icons-material/Google';
+import Button from '@mui/material/Button';
 
 function Login() {
 
@@ -20,7 +21,7 @@ function Login() {
         </Head>
         <LoginContainer>
           <Logo src="/wolf.png"></Logo>
-          <Button  startIcon={<GoogleIcon color="secondary" />} onClick={signIn} variant="outline" color="error">CONTINUAR COM A GOOGLE</Button>
+          <Button  startIcon={<GoogleIcon color="white" />} onClick={signIn} variant="contained" color="secondary">CONTINUAR COM A GOOGLE</Button>
         </LoginContainer>
     </Container>
   )

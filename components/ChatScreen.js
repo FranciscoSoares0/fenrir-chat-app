@@ -122,7 +122,7 @@ const deleteUserById=async(id)=>{
         await deleteDoc(docRef);
         notify();
         setTimeout(function(){
-            location.href = "http://localhost:3000/";  
+            location.href = "https://fenrir-chat-app.herokuapp.com/";  
         },1000);
     }
     
