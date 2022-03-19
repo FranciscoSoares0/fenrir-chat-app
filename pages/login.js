@@ -11,6 +11,7 @@ function Login() {
     auth.signInWithPopup(provider).catch(alert)
   };
 
+  
   return (
     <Container>
         <Head>
@@ -19,7 +20,7 @@ function Login() {
         </Head>
         <LoginContainer>
           <Logo src="/wolf.png"></Logo>
-          <Button startIcon={<GoogleIcon color="info" />} onClick={signIn} variant="outline">CONTINUAR COM A GOOGLE</Button>
+          <Button  startIcon={<GoogleIcon color="secondary" />} onClick={signIn} variant="outline" color="error">CONTINUAR COM A GOOGLE</Button>
         </LoginContainer>
     </Container>
   )
@@ -30,20 +31,25 @@ export default Login;
 const Container=styled.div`
 display:grid;
 place-items: center;
-height:100vh;
-background: #2980B9;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+background: #4568DC;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #B06AB3, #4568DC);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #B06AB3, #4568DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+width: 100%;
+height: 100vh;
 
 `;
 
 const LoginContainer=styled.div`
 display:flex;
 flex-direction:column;
-padding:100px;
+padding:70px;
 align-items:center;
 background-color:white;
-border-radius:5px; `;
+border-radius:67% 33% 48% 52% / 57% 34% 66% 43% ;
+min-width: 10px;
+min-height: 200px;
+`;
 
 const Logo=styled.img`
 height: 200px;

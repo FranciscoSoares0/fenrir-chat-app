@@ -32,25 +32,29 @@ margin:10px;
 min-width:60px;
 padding-bottom:26px;
 position:relative;
-text-align:right`;
+text-align:right;
+color:white
+`;
 
 const Sender= styled(MessageElement)`
 margin-left:auto;
-background-color:#99ebfa;
+background-color:#7546a6;
+color:white;
 `
 ;
 
 const Receiver= styled(MessageElement)`
-background-color:whitesmoke;
+background-color:grey;
 text-align:left;
 `;
 
 const Timestamp= styled.span`
-color:gray;
+color:white;
 padding:10px;
 font-size:9px;
 position: absolute;
 bottom:0;
 text-align: right;
 right:0;
+
 `;

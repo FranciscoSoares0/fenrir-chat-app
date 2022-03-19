@@ -5,6 +5,7 @@ import Sidebar from "../../components/Sidebar";
 import ChatScreen from "../../components/ChatScreen";
 import {db,auth} from "../../firebase";
 import {useAuthState} from "react-firebase-hooks/auth"
+import {Logo} from "../../components/Loading"
 
 
 function Chat({chat,messages}) {
@@ -16,6 +17,7 @@ function Chat({chat,messages}) {
             <link rel="icon" href="/icon.png" />
           </Head>
           <Sidebar/>
+          
           <ChatContainer>
             <ChatScreen chat={chat} messages={messages}>
 
@@ -58,6 +60,7 @@ export async function getServerSideProps(context) {
 const Container=styled.div`
 display:flex;
 `;
+
 
 const ChatContainer= styled.div`
 flex:1;

@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from "styled-components"
-import {db,auth} from "../firebase";
+import {db,auth,firestore} from "../firebase";
 import {Avatar,Button, IconButton} from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import {useAuthState} from "react-firebase-hooks/auth";
 import{useRouter} from "next/router";
 import {useCollection} from "react-firebase-hooks/firestore";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon"
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -17,11 +17,16 @@ import TimeAgo from "timeago-react"
 import {Picker} from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
 import SendIcon from '@mui/icons-material/Send';
+import DeleteIcon from '@mui/icons-material/Delete';
+import{collection,getDocs,deleteDoc,doc} from "firebase/firestore"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
 
 function ChatScreen({chat,messages}) {
+    
     const[showEmojis,setShowEmojis]=useState(false);
     const[user]=useAuthState(auth);
     const[input,setInput]=useState("");
@@ -35,9 +40,20 @@ function ChatScreen({chat,messages}) {
     const [recipientSnapshot]=useCollection(
         db.collection("users").where("email","==",getRecipientEmail(chat.users,user))
         );
-    
-    
+        const [chatsSnapshot]=useCollection(
+            db.collection("chats")
+            );
+    const notify = () => toast.error('Conversa Removida!', {
+    position: "top-center",
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
+
     const showMessages=()=>{
+        
         if(messagesSnapshot){
             return messagesSnapshot.docs.map(message=>(
                 <Message
@@ -56,7 +72,7 @@ function ChatScreen({chat,messages}) {
         }
         
     }
-
+    
     const scrollToBottom=()=>{
         endOfMessagesRef.current.scrollIntoView({
             behavior:"smooth",
@@ -94,9 +110,40 @@ function ChatScreen({chat,messages}) {
        
       
       };
+const recipient=recipientSnapshot?.docs?.[0]?.data();
+const recipient2=chatsSnapshot?.docs?.[0]?.id;
 
-    const recipient=recipientSnapshot?.docs?.[0]?.data();
-    const recipientEmail=getRecipientEmail(chat.users,user);
+const recipientEmail=getRecipientEmail(chat.users,user);
+
+const deleteUserById=async(id)=>{
+    const input=prompt('Tem a certeza que pretende eliminar esta conversa?Isto irá eliminar todas as mensagens!Insira(Sim/Não)');
+    if (input==="Sim"|| input==="sim"){
+        const docRef=doc(db,"chats",id);
+        await deleteDoc(docRef);
+        notify();
+        setTimeout(function(){
+            location.href = "http://localhost:3000/";  
+        },1000);
+    }
+    
+    
+    
+    
+}
+
+const ScrollDown=()=>{
+    
+    var objDiv = document.getElementById('container');
+    var mesDiv=document.getElementById("message-container");
+    console.log(objDiv);
+    
+    objDiv.scrollIntoView(true);
+    var myDiv = document.getElementById("message-container");
+    myDiv.scrollTop = myDiv.scrollHeight;
+    
+    
+      
+}
   return (
     <Container>
         <Header>
@@ -121,40 +168,55 @@ function ChatScreen({chat,messages}) {
                 
             </HeaderInformation>
             <HeaderIcons>
-                <input  onSubmit={sendMessage}  id="icon-button-file"
-                    type="file" style={{ display: 'none' }} />
-                <label htmlFor="icon-button-file">
-                <IconButton  color="secondary" aria-label="upload picture"
-                    component="span">
-                    <AttachFileIcon />
+                <IconButton>
+                    <DeleteIcon onClick={()=>deleteUserById(recipient2)} color="secondary" />
                 </IconButton>
-                </label>  
+                  
                 
             </HeaderIcons>
         </Header>
 
-        <MessageContainer>
+        <MessageContainer id="message-container">
             {showMessages()}
             <EndofMessage ref={endOfMessagesRef}/>
+            
         </MessageContainer>
-
-        <EmoticonContainer>
-                {showEmojis && (<Picker style={{width: '100%'}} onSelect={addEmoji}/>)}
+                    
+        
+           
+        <EmoticonContainer >
                 
-            </EmoticonContainer>
-        <InputContainer>
-            
+            {showEmojis && (<Picker  style={{width: '100%'}} onSelect={addEmoji}/>)}
+                
+        </EmoticonContainer>
+        <InputContainer id="container"  >
             <IconButton>
-                    <InsertEmoticonIcon color="secondary" fontSize='inherit' onClick={() => {setShowEmojis(!showEmojis)}}/>
-                </IconButton>
-            <Input value={input} onChange={e=> setInput(e.target.value)}/>
-            <IconButton>
-                <SendIcon  color="secondary" disabled={!input} type="submit" onClick={sendMessage}></SendIcon>
+                <EmojiEmotionsIcon color="secondary" fontSize='inherit' onClick={() => {setShowEmojis(!showEmojis);ScrollDown()}}/>
             </IconButton>
+        <Input onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }} value={input} onChange={e=> setInput(e.target.value)}/>
+        <IconButton>
+            <SendIcon  color="secondary" disabled={!input} type="submit" onClick={sendMessage}></SendIcon>
+        </IconButton>
             
             
-        </InputContainer>
+        </InputContainer> 
+       
+        
+        <ToastContainer
+            theme="dark"
+            type="default"
+            position='top-center'
+            
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
     </Container>
+    
   );
 }
 
@@ -177,6 +239,7 @@ padding:20px;
 margin-left: 15px;
 margin-right:15px;
 background-color:whitesmoke;
+min-width:10vh;
 
 `;
 
@@ -188,6 +251,10 @@ position:sticky;
 bottom:0;
 background-color:white;
 z-index:100;
+min-width:15vh;
+width:100%;
+
+
 `;
 
 const Header=styled.div`
@@ -200,23 +267,29 @@ padding:11px;
 height:80px;
 align-items:center;
 border-bottom: 1px solid whitesmoke;
+min-width:8vh;
+
 `;
 
 const HeaderInformation=styled.div`
+min-width:240px;
 margin-left:15px;
 flex:1;
+min-width:10vh;
 
 >h3{
     margin-bottom:3px;
+    font-size:calc(6px + 0.8vw);
 }
 
 >p{
-    font-size:14px;
+    font-size:calc(6px + 0.3vw);
     color:gray;
 }
 `;
 
-const HeaderIcons=styled.div``;
+const HeaderIcons=styled.div`
+`;
 
 const EndofMessage=styled.div`
 margin-bottom:50px;
@@ -225,5 +298,7 @@ margin-bottom:50px;
 const MessageContainer=styled.div`
 padding:30px;
 background-color:#e2e9ee;
-min-height: 80vh;
+min-height: 100vh;
+min-width:10vh;
 `;
+

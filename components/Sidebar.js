@@ -8,11 +8,26 @@ import {auth, db} from "../firebase";
 import {useAuthState} from "react-firebase-hooks/auth"
 import {useCollection} from "react-firebase-hooks/firestore"
 import Chat from "./Chat"
+import  {useState} from "react";
+import getRecipientEmail from '../utils/getRecipientEmail'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Sidebar() {
+const [searchTerm,setSearchTerm]=useState("");
 const [user]=useAuthState(auth)
 const userChatRef=db.collection('chats').where('users','array-contains',user.email)
 const[chatsSnapshot]=useCollection(userChatRef)
+
+const notify = () => toast('🐺 Conversa Adicionada!', {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
 const createChat= () =>{
     const input=prompt('Insira um email do utilizador com o qual quer conversar');
     if(!input) return null
@@ -22,12 +37,13 @@ const createChat= () =>{
         db.collection('chats').add({
             users:[user.email,input],
         });
+        notify();
     }
 };
 
 const chatAlreadyExists=(recipientEmail)=>
     !!chatsSnapshot?.docs.find(chat=> chat.data().users.find(user=>user===recipientEmail)?.length>0)
-
+    
 
     return (
     <Container>
@@ -43,24 +59,95 @@ const chatAlreadyExists=(recipientEmail)=>
                 </IconButton>
             </IconsContainer>
         </Header>
-        
+        <Search>
+            <SearchIcon/>
+            <SearchInput
 
-        
-        {chatsSnapshot?.docs.map((chat)=>(
-            <Chat key={chat.id} id={chat.id} users={chat.data().users}></Chat>
+            type="text"
+            placeholder="Pesquise uma conversa"
+            onChange={(event) => {
+                setSearchTerm(event.target.value);
+            }}
+        />
+        </Search>
+        {chatsSnapshot?.docs.filter((user)=>{
+            if(searchTerm==""){
+                return user
+            } else if (user.data().users[1].toLowerCase().includes(searchTerm.toLowerCase())){
+                console.log(user.data().users[1])
+                return user
+                
+            }
+        }).map((chat)=>(
+            <Contact>
+               <Chat key={chat.id} id={chat.id} users={chat.data().users}></Chat>
+            </Contact>
+            
         ))}
+        
+        <ToastContainer
+            theme="dark"
+            type="default"
+            position='top-center'
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
     </Container>
+    
     );
 }
 
 export default Sidebar;
 
+const Contact=styled.div`
+display: flex;
+flex-direction:column;
+font-size:calc(3px + 0.7vw);
+
+
+`;
+const Search=styled.div`
+display: flex;
+
+align-items: center;
+padding:5px;
+border-radius:2px;
+height:60px;
+background-color:#f1f2f6;
+border-radius:5px;
+
+`;
+
+const SearchInput= styled.input`
+outline-width:0;
+border:none;
+flex:1;
+font-size:15px ;
+margin-left:10px;
+background-color:#f1f2f6;
+min-width:10vh;
+font-size:calc(3px + 0.5vw);
+
+`;
+const Id=styled.div`
+font-size: 9px;
+align-items:center;
+justify-content:center;
+
+
+`;
 const Container = styled.div`
 flex:0.45;
 border-right: 1px solid whitesmoke;
 height:100vh;
-min-width: 300px;
-max-width: 350px;
+min-width: 130px;
+max-width: 290px;
 overflow-y: scroll;
 
 ::-webkit-scrollbar{

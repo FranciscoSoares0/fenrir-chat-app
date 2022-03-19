@@ -10,6 +10,8 @@ import{useRouter} from "next/router";
 function Chat({id,users}) {
     const router=useRouter();
     const[user]=useAuthState(auth);
+    const userChatRef=db.collection('chats').where('users','array-contains',user.email)
+    const[chatsSnapshot]=useCollection(userChatRef)
     const [recipientSnapshot]=useCollection(
         db.collection("users").where("email","==",getRecipientEmail(users,user))
         );
@@ -17,9 +19,11 @@ function Chat({id,users}) {
     const enterChat = () =>{
         router.push(`/chat/${id}`)
     }
-
+    
     const recipient=recipientSnapshot?.docs?.[0]?.data();
+    
     const recipientEmail=getRecipientEmail(users,user);
+   
 
   return (
       <Container onClick={enterChat}>
@@ -44,7 +48,7 @@ cursor:pointer;
 padding:15px;
 word-break:break-word;
 :hover{
-    background-color:#e9eaeb;
+    background-color:whitesmoke;
 }
 `;
 
