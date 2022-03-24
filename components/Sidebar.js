@@ -43,7 +43,11 @@ const createChat= () =>{
 
 const chatAlreadyExists=(recipientEmail)=>
     !!chatsSnapshot?.docs.find(chat=> chat.data().users.find(user=>user===recipientEmail)?.length>0)
+const SignOut=()=>{
+    location.href = "http://localhost:3000/";
+    auth.signOut()
     
+}
 
     return (
     <Container>
@@ -55,14 +59,14 @@ const chatAlreadyExists=(recipientEmail)=>
                     <AddCommentIcon color="secondary" onClick={createChat}/>
                 </IconButton>
                 <IconButton>
-                    <LogoutIcon color="secondary" onClick={() =>auth.signOut()}/>
+                    <LogoutIcon color="secondary" onClick={() =>SignOut()}/>
                 </IconButton>
             </IconsContainer>
         </Header>
         <Search>
             <SearchIcon/>
             <SearchInput
-
+            style={{"fontFamily":"Roboto"}}
             type="text"
             placeholder="Pesquise uma conversa"
             onChange={(event) => {
@@ -133,6 +137,7 @@ margin-left:10px;
 background-color:#f1f2f6;
 min-width:10vh;
 font-size:calc(3px + 0.5vw);
+font-family: 'Roboto';
 
 `;
 const Id=styled.div`

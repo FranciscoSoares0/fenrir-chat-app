@@ -23,11 +23,11 @@ export default function Home() {
           <Line/>
           <Instructions>
             <AddCommentIcon color="secondary"/>
-            <Description>Clique para começar uma nova conversa</Description>
+            <Description style={{"fontFamily":"Roboto"}}>Clique para começar uma nova conversa</Description>
           </Instructions>
           <Instructions>
             <ExitToAppIcon color="secondary"/>
-            <Description>Clique para sair da conta</Description>
+            <Description style={{"fontFamily":"Roboto"}}>Clique para sair da conta</Description>
           </Instructions>
           
         </TitleLogo>
@@ -73,7 +73,6 @@ const Logo=styled.img`
 min-height: 40px;
 min-width:40px;
 `;
-
 const Title=styled.h1`
 font-family:'Sansita Swashed' ;
 font-size:calc(80px + 0.3vw);

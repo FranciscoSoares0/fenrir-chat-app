@@ -9,7 +9,7 @@ function Message({user,message}) {
   const [userLoggedIn]=useAuthState(auth);
   const TypeOfMessage=user===userLoggedIn.email?Sender:Receiver;
   return (
-    <Container>
+    <Container style={{"fontFamily":"Roboto"}}>
         <TypeOfMessage>{message.message}
         <Timestamp>
           {message.timestamp?moment(message.timestamp).format('LT'):"..."}

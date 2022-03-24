@@ -6,6 +6,7 @@ import { auth,provider } from '../firebase';
 import GoogleIcon from '@mui/icons-material/Google';
 import Button from '@mui/material/Button';
 
+
 function Login() {
 
   const signIn= () =>{
@@ -15,11 +16,13 @@ function Login() {
   
   return (
     <Container>
+      
         <Head>
             <title>Fenrir</title>
             <link rel="icon" href="/icon.png" />
         </Head>
         <LoginContainer>
+          <Title>Fenrir</Title>
           <Logo src="/wolf.png"></Logo>
           <Button  startIcon={<GoogleIcon color="white" />} onClick={signIn} variant="contained" color="secondary">CONTINUAR COM A GOOGLE</Button>
         </LoginContainer>
@@ -29,6 +32,12 @@ function Login() {
 
 export default Login;
 
+const Title=styled.h1`
+font-family:'Sansita Swashed' ;
+font-size:calc(80px + 0.3vw);
+
+
+`;
 const Container=styled.div`
 display:grid;
 place-items: center;
@@ -47,9 +56,9 @@ flex-direction:column;
 padding:70px;
 align-items:center;
 background-color:white;
-border-radius:67% 33% 48% 52% / 57% 34% 66% 43% ;
-min-width: 10px;
-min-height: 200px;
+border-radius:18% 82% 9% 91% / 85% 21% 79% 15%     ;
+
+min-height: 250px;
 `;
 
 const Logo=styled.img`

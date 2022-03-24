@@ -21,6 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import{collection,getDocs,deleteDoc,doc} from "firebase/firestore"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Head from "next/head";
 
 
 
@@ -43,6 +44,10 @@ function ChatScreen({chat,messages}) {
         const [chatsSnapshot]=useCollection(
             db.collection("chats")
             );
+    
+    const test=messagesSnapshot?.docs?.[(messagesSnapshot?.docs?.length)-1]?.id?.message
+    
+    console.log(test)
     const notify = () => toast.error('Conversa Removida!', {
     position: "top-center",
     hideProgressBar: false,
@@ -57,11 +62,13 @@ function ChatScreen({chat,messages}) {
         if(messagesSnapshot){
             return messagesSnapshot.docs.map(message=>(
                 <Message
+                
                     key={message.id}
                     user={message.data().user}
                     message={{
                         ...message.data(),
                         timestamp:message.data().timestamp?.toDate().getTime(),
+                        
                     }}
                 />
             ));
@@ -91,6 +98,7 @@ function ChatScreen({chat,messages}) {
         message:input,
         user:user.email,
         photoURL:user.photoURL,
+        read:false
         
         
     });
@@ -146,6 +154,10 @@ const ScrollDown=()=>{
 }
   return (
     <Container>
+        <Head>
+            <title>Fenrir</title>
+            <link rel="icon" href="/icon.png" />
+        </Head>
         <Header>
             {recipient ? (
                 <Avatar src={recipient?.photoURL}/>
@@ -155,11 +167,11 @@ const ScrollDown=()=>{
             )}
             
             <HeaderInformation>
-                <h3>{recipientEmail}</h3>
+                <h3 style={{"fontFamily":"Roboto"}}>{recipientEmail}</h3>
                 {recipientSnapshot ? (
                     <p>Última sessão: {' '}
                      {recipient?.lastSeen?.toDate() ? (
-                        <TimeAgo datetime={recipient?.lastSeen?.toDate()}/>
+                        <TimeAgo style={{"fontFamily":"Roboto"}} datetime={recipient?.lastSeen?.toDate()}/>
                     ):"Indisponível"}
                     </p>
                 ):(
@@ -240,6 +252,7 @@ margin-left: 15px;
 margin-right:15px;
 background-color:whitesmoke;
 min-width:10vh;
+font-family: 'Roboto';
 
 `;
 
@@ -253,6 +266,7 @@ background-color:white;
 z-index:100;
 min-width:15vh;
 width:100%;
+font-family: 'Roboto';
 
 
 `;
