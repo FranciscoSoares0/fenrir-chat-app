@@ -44,7 +44,7 @@ const createChat= () =>{
 const chatAlreadyExists=(recipientEmail)=>
     !!chatsSnapshot?.docs.find(chat=> chat.data().users.find(user=>user===recipientEmail)?.length>0)
 const SignOut=()=>{
-    location.href = "http://localhost:3000/";
+    location.href = "https://fenrir-chat-app.herokuapp.com/";
     auth.signOut()
     
 }

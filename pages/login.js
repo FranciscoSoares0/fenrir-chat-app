@@ -5,12 +5,16 @@ import {Avatar,IconButton} from "@material-ui/core";
 import { auth,provider } from '../firebase';
 import GoogleIcon from '@mui/icons-material/Google';
 import Button from '@mui/material/Button';
+import {useAuthState} from "react-firebase-hooks/auth"
+import {db,firestore} from "../firebase";
 
 
 function Login() {
-
+  
+  
   const signIn= () =>{
     auth.signInWithPopup(provider).catch(alert)
+    
   };
 
   

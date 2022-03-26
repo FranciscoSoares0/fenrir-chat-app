@@ -7,6 +7,8 @@ import {auth,db} from "../firebase";
 import {useCollection} from "react-firebase-hooks/firestore";
 import{useRouter} from "next/router";
 import moment from "moment"
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import Head from 'next/head'
 
 function Chat({id,users}) {
     const router=useRouter();
@@ -28,34 +30,64 @@ function Chat({id,users}) {
     
     const recipientEmail=getRecipientEmail(users,user);
    const lastMessageId=lastMessageSnapshot?.docs?.[(lastMessageSnapshot?.docs?.length)-1]?.id
-   
-   
+   const [notification,SetNotification]=useState(0)
+   const ReadLastMessage=()=>{
+    lastMessageSnapshot?.docs.map((message)=>{
+        if(message.data().read==false){
+            db.collection('chats').doc(id).collection('messages').doc(message.id).update({
+                read:true
+            }
+                
+            )
+        }
+    })
+}
+    
    
   return (
-      <Container onClick={enterChat}>
+      <Container onClick={()=>{enterChat();ReadLastMessage()}}>
+
           {recipient ? (
              <UserAvatar src={recipient?.photoURL}/> 
           ):(
             <UserAvatar>{recipientEmail[0]}</UserAvatar> 
           )}
           <EmailMessageContainer>
-             <p style={{"fontFamily":"Roboto"}}>{recipientEmail}</p>
+             <Email >{recipientEmail}</Email>
+          
+          {lastMessageSnapshot?.docs.map((message)=>{
+                if(message.id==lastMessageId && message.data().user!=user.email && message.data().read===false){
+                    return(
+                        
+                        <LTcontainer key={message.id}>
+                            <NotificationsActiveIcon fontSize="small" color="secondary"/>
+                        </LTcontainer>
+                        
+                        
+                    )
+                    
+                    }
+                })}
+          
+          
           {lastMessageSnapshot?.docs.map((message)=>{
               if(message.id==lastMessageId){
+
                   return(
                       <LTcontainer key={message.id}>
                           <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().message}</LastMessage>
                           <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().timestamp?.toDate().toLocaleTimeString('en-US')}</LastMessage>
                       </LTcontainer>
                       
+                      
                   )
+                  
               }
-              
-               
-            
+             
           }
               
           )}
+          
          
           </EmailMessageContainer>
           
@@ -66,6 +98,10 @@ function Chat({id,users}) {
         }
 
 export default Chat;
+const Email=styled.p`
+font-family:'Roboto';
+font-size:calc(8px + 0.3vw);
+`;
 const LTcontainer=styled.div`
 display:flex;
 
