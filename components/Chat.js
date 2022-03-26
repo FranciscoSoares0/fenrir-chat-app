@@ -57,6 +57,7 @@ function Chat({id,users}) {
           
           {lastMessageSnapshot?.docs.map((message)=>{
                 if(message.id==lastMessageId && message.data().user!=user.email && message.data().read===false){
+                    flag=true;
                     return(
                         
                         <LTcontainer key={message.id}>
@@ -75,8 +76,20 @@ function Chat({id,users}) {
 
                   return(
                       <LTcontainer key={message.id}>
-                          <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().message}</LastMessage>
-                          <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().timestamp?.toDate().toLocaleTimeString('en-US')}</LastMessage>
+                          {message.data().user===user.email?(
+                            <div>
+                                <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().message}</LastMessage>
+                                <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().timestamp?.toDate().toLocaleTimeString('en-US')}</LastMessage>
+                            </div>
+                            
+                          ):(
+                            <div>
+                                <LastMessage>{message.data().user}:</LastMessage>
+                                <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().message}</LastMessage>
+                                <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().timestamp?.toDate().toLocaleTimeString('en-US')}</LastMessage>
+                            </div>
+                          )}
+                          
                       </LTcontainer>
                       
                       

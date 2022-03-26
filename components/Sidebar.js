@@ -85,7 +85,9 @@ const SignOut=()=>{
         }).map((chat)=>(
             <Contact key={chat.id}>
                <Chat  id={chat.id} users={chat.data().users}></Chat>
+               <Line/>
             </Contact>
+            
             
         ))}
         
@@ -108,6 +110,14 @@ const SignOut=()=>{
 }
 
 export default Sidebar;
+const Line=styled.hr`
+  border: 0;
+  clear:both;
+  display:block;
+  width: 80%;               
+  background-color:#e6e3e3;
+  height: 1px;
+`;
 
 const Contact=styled.div`
 display: flex;
