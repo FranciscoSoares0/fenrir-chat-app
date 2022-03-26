@@ -57,7 +57,7 @@ function Chat({id,users}) {
           
           {lastMessageSnapshot?.docs.map((message)=>{
                 if(message.id==lastMessageId && message.data().user!=user.email && message.data().read===false){
-                    flag=true;
+                    
                     return(
                         
                         <LTcontainer key={message.id}>
