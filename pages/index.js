@@ -22,11 +22,11 @@ export default function Home() {
           style={{marginBottom:10}}></Logo>
           <Line/>
           <Instructions>
-            <AddCommentIcon color="secondary"/>
+            <AddCommentIcon style={{ color: 'purple' }}/>
             <Description style={{"fontFamily":"Roboto"}}>Clique para começar uma nova conversa</Description>
           </Instructions>
           <Instructions>
-            <ExitToAppIcon color="secondary"/>
+            <ExitToAppIcon style={{ color: 'purple' }}/>
             <Description style={{"fontFamily":"Roboto"}}>Clique para sair da conta</Description>
           </Instructions>
           

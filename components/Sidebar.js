@@ -56,10 +56,10 @@ const SignOut=()=>{
 
             <IconsContainer>
                 <IconButton>
-                    <AddCommentIcon color="secondary" onClick={createChat}/>
+                    <AddCommentIcon style={{ color: 'purple' }} onClick={createChat}/>
                 </IconButton>
                 <IconButton>
-                    <LogoutIcon color="secondary" onClick={() =>SignOut()}/>
+                    <LogoutIcon style={{ color: 'purple' }} onClick={() =>SignOut()}/>
                 </IconButton>
             </IconsContainer>
         </Header>

@@ -9,6 +9,8 @@ import{useRouter} from "next/router";
 import moment from "moment"
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import Head from 'next/head'
+import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
+import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
 
 function Chat({id,users}) {
     const router=useRouter();
@@ -33,13 +35,16 @@ function Chat({id,users}) {
    const [notification,SetNotification]=useState(0)
    const ReadLastMessage=()=>{
     lastMessageSnapshot?.docs.map((message)=>{
-        if(message.data().read==false){
+        if(user.email!==message.data().user){
+           if(message.data().read==false){
             db.collection('chats').doc(id).collection('messages').doc(message.id).update({
                 read:true
             }
                 
             )
+        } 
         }
+        
     })
 }
     
@@ -79,7 +84,14 @@ function Chat({id,users}) {
                           {message.data().user===user.email?(
                             <div>
                                 <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().message}</LastMessage>
-                                <LastMessage style={{"fontFamily":"Roboto"}}>{message.data().timestamp?.toDate().toLocaleTimeString('en-US')}</LastMessage>
+                                <ReadTimeContainer >
+                                    {message.data().read ===false?(
+                                        <MarkChatUnreadIcon fontSize="small" style={{ color: 'grey' }}></MarkChatUnreadIcon>
+                                    ):
+                                        <MarkChatReadIcon fontSize="small" color="info"></MarkChatReadIcon>}
+                                    <LastMessage style={{"fontFamily":"Roboto","marginLeft":"20px"}}>{message.data().timestamp?.toDate().toLocaleTimeString('en-US')}</LastMessage>
+                                </ReadTimeContainer>
+                                
                             </div>
                             
                           ):(
@@ -115,6 +127,17 @@ const Email=styled.p`
 font-family:'Roboto';
 font-size:calc(8px + 0.3vw);
 `;
+
+const ReadTimeContainer=styled.div`
+display:flex;
+align-items:center;
+justify-content:flex-end;
+width:100%;
+flex-wrap: wrap;
+
+
+`;
+
 const LTcontainer=styled.div`
 display:flex;
 
@@ -144,7 +167,6 @@ flex-direction:column;
 `;
 
 const LastMessage = styled.p`
-font-size:calc(1px + 0.7vw);
 margin-right:5px;
 color:purple;
 

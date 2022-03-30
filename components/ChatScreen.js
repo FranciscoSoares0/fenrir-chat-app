@@ -65,6 +65,7 @@ function ChatScreen({chat,messages}) {
                 
                     key={message.id}
                     user={message.data().user}
+                    read={message.data().read}
                     message={{
                         ...message.data(),
                         timestamp:message.data().timestamp?.toDate().getTime(),
@@ -74,7 +75,7 @@ function ChatScreen({chat,messages}) {
             ));
         } else {
             return JSON.parse(messages).map(message=>(
-                <Message key={message.id} user={message.user} message={message}/>
+                <Message key={message.id} user={message.user} read={message.read} message={message}/>
             ));
         }
         
@@ -152,6 +153,8 @@ const ScrollDown=()=>{
     
       
 }
+
+
   return (
     <Container>
         <Head>
@@ -181,7 +184,7 @@ const ScrollDown=()=>{
             </HeaderInformation>
             <HeaderIcons>
                 <IconButton>
-                    <DeleteIcon onClick={()=>deleteUserById(recipient2)} color="secondary" />
+                    <DeleteIcon onClick={()=>deleteUserById(recipient2)} style={{ color: 'purple' }} />
                 </IconButton>
                   
                 
@@ -203,11 +206,11 @@ const ScrollDown=()=>{
         </EmoticonContainer>
         <InputContainer id="container"  >
             <IconButton>
-                <EmojiEmotionsIcon color="secondary" fontSize='inherit' onClick={() => {setShowEmojis(!showEmojis);ScrollDown()}}/>
+                <EmojiEmotionsIcon style={{ color: 'purple' }} fontSize='inherit' onClick={() => {setShowEmojis(!showEmojis);ScrollDown()}}/>
             </IconButton>
         <Input onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }} value={input} onChange={e=> setInput(e.target.value)}/>
         <IconButton>
-            <SendIcon  color="secondary" disabled={!input} type="submit" onClick={sendMessage}></SendIcon>
+            <SendIcon  style={{ color: 'purple' }} disabled={!input} type="submit" onClick={sendMessage}></SendIcon>
         </IconButton>
             
             
